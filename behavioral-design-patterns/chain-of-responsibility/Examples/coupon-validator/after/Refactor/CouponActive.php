@@ -1,20 +1,9 @@
 <?php
 
-class CouponActive
+require_once 'AbstractCouponValidator.php';
+
+class CouponActive extends AbstractCouponValidator
 {
-    private Coupon $coupon;
-    private $nextValidator;
-
-    public function __construct(Coupon $coupon)
-    {
-        $this->coupon = $coupon;
-    }
-
-    public function setNextValidator($validator)
-    {
-        $this->nextValidator = $validator;
-    }
-
     public function validate($code)
     {
         if (!$this->coupon->isActive($code)) {
@@ -24,14 +13,5 @@ class CouponActive
         echo "Coupon is active" . PHP_EOL;
 
         return $this->goToNextValidator($code);
-    }
-
-    private function goToNextValidator($code)
-    {
-        if ($this->nextValidator === null) {
-            return true;
-        } else {
-            return $this->nextValidator->validate($code);
-        }
     }
 }
