@@ -2,22 +2,31 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\User;
+use App\Repositories\User\UserRepositoryInterface;
 use Illuminate\Http\Request;
 
 class UserController extends Controller
 {
-    public function updateWallet(Request $request)
+    private $userRepository;
+
+    /**
+     * @param UserRepositoryInterface $userRepository
+     */
+    public function __construct(UserRepositoryInterface $userRepository)
     {
-        $user = User::find(1);
+        $this->userRepository = $userRepository;
+    }
 
-        // $user_wallet = $user->wallet;
-        // $user_wallet += 100000;
-        // $user->wallet = $user_wallet;
-        // $user->save();
-
-        // $user->update(['wallet' => $user_wallet]);
-
-        $user->increaseWallet(100000);
+    public function create(Request $request)
+    {
+        $user = $this->userRepository->create([
+            'first_name' => $request->first_name,
+            'last_name' => $request->last_name,
+            'user_email' => $request->email,
+            'password' => $request->password
+        ]);
+        if ($user) {
+            return back()->with(['message' => 'ثبت نام شما با موفقیت انجام شد.']);
+        }
     }
 }
