@@ -41,4 +41,12 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    public function increaseWallet(int $amount): void
+    {
+        $currentWallet = $this->attributes['wallet'];
+        $this->attributes['wallet'] = $currentWallet + $amount;
+        // $this->increment('wallet', $amount);
+        $this->save();
+    }
 }
