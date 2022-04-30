@@ -4,24 +4,17 @@ namespace Src\Solid\Srp;
 
 class ConfirmationMailMailer
 {
-    private $templating;
-    private $translator;
+    private $confirmationMailFactory;
     private $mailer;
 
     /**
-     * @param $templating
-     * @param $translator
-     * @param $mailer
+     * @param ConfirmationMailFactory $confirmationMailFactory
+     * @param MailerInterface $mailer
      */
 
-    public function __construct(
-        TemplatingEngineInterface $templating,
-        TranslatorInterface       $translator,
-        MailerInterface           $mailer
-    )
+    public function __construct(ConfirmationMailFactory $confirmationMailFactory, MailerInterface $mailer)
     {
-        $this->templating = $templating;
-        $this->translator = $translator;
+        $this->confirmationMailFactory = $confirmationMailFactory;
         $this->mailer = $mailer;
     }
 
@@ -33,11 +26,7 @@ class ConfirmationMailMailer
 
     private function createMessageFor(User $user): Message
     {
-        $subject = $this->translator->translate('please confirm your email address');
-        $body = $this->templating->render('email.confirm', [
-            'confirm_code' => $user->getConfirmCode()
-        ]);
-        return new Message($subject, $body, $user->getEmailAddress());
+        return $this->confirmationMailFactory->createMessageFor($user);
     }
 
     private function sendMessage(Message $message)
