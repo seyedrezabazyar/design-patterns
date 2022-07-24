@@ -1,40 +1,54 @@
 <?php
 class Kavenegar
 {
-    public function sendSms()
+    public function sendNotification()
     {
         echo 'Send SMS' . PHP_EOL;
     }
 }
-class User
+class KavenegarAdapter
 {
     private $kavenegar;
     public function __construct(Kavenegar $kavenegar)
     {
         $this->kavenegar = $kavenegar;
+    }
+
+    public function sendSms()
+    {
+        return $this->kavenegar->sendNotification();
+    }
+}
+class User
+{
+    private $kavenegarAdapter;
+    public function __construct(KavenegarAdapter $kavenegarAdapter)
+    {
+        $this->KavenegarAdapter = $kavenegarAdapter;
     }
     public function create()
     {
         echo 'User Created' . PHP_EOL;
-        $this->kavenegar->sendSms();
+        $this->KavenegarAdapter->sendSms();
     }
 }
 class Order
 {
-    private $kavenegar;
-    public function __construct(Kavenegar $kavenegar)
+    private $kavenegarAdapter;
+    public function __construct(KavenegarAdapter $kavenegarAdapter)
     {
-        $this->kavenegar = $kavenegar;
+        $this->KavenegarAdapter = $kavenegarAdapter;
     }
     public function create()
     {
         echo 'Order Created' . PHP_EOL;
-        $this->kavenegar->sendSms();
+        $this->KavenegarAdapter->sendSms();
     }
 }
 
 $kavenegar = new Kavenegar;
-$user = new User($kavenegar);
+$KavenegarAdapter = new KavenegarAdapter($kavenegar);
+$user = new User($KavenegarAdapter);
 $user->create();
-$order = new Order($kavenegar);
+$order = new Order($KavenegarAdapter);
 $order->create();
