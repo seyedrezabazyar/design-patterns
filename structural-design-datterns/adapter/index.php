@@ -1,7 +1,7 @@
 <?php
 class Kavenegar
 {
-    public function sendNotification()
+    public function sms()
     {
         echo 'Send SMS' . PHP_EOL;
     }
@@ -16,7 +16,7 @@ class KavenegarAdapter
 
     public function sendSms()
     {
-        return $this->kavenegar->sendNotification();
+        return $this->kavenegar->sms();
     }
 }
 class User
